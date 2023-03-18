@@ -1,0 +1,8 @@
+﻿## Interface: 30300
+## Title:-|cFF00DDFF[hpsnk]|r HappyAutoSlove
+## Author: hpsnk
+## Notes:[hpsnk]脚本检测自动答题 
+## Version: 1.0.0
+## SavedVariablesPerCharacter: HappyAutoSloveDataPerCharDB
+
+HappyAutoSlove.lua
