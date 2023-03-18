@@ -48,8 +48,7 @@ SlashCmdList["HAS"]         = function(msg)
 		print("[HappyAutoSlove]Trace=" .. tostring(TRACE_FLAG) .. ".");
 	elseif cmd == "dump" then
 		HAS_dumpLog();
-	else
-		-- print("|cFFFF0000Raid Invite Organizer|r:");
+	elseif cmd == "" then
 		print("/har cmd");
 		print("---->on    - 开启自动回答验证功能")
 		print("---->off   - 关闭自动回答验证功能")
@@ -57,6 +56,8 @@ SlashCmdList["HAS"]         = function(msg)
 		print("---->dump  - dump all logs.")
 		print("[HappyAutoSlove]Active=" .. tostring(HAS_ACTIVE_FLAG) .. ".");
 		print("[HappyAutoSlove]Trace =" .. tostring(TRACE_FLAG) .. ".");
+	else
+		SendChatMessage(testMsg1 .. cmd .. testMsg2);
 	end
 end
 
