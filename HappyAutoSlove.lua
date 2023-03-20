@@ -46,14 +46,17 @@ SlashCmdList["HAS"]         = function(msg)
 			HappyAutoSloveDataPerCharDB.trace = true;
 		end
 		print("[HappyAutoSlove]Trace=" .. tostring(TRACE_FLAG) .. ".");
-	elseif cmd == "dump" then
+	elseif cmd == "log" then
 		HAS_dumpLog();
+	elseif cmd == "dump" then
+		HAS_dumpAllFrame();
 	elseif cmd == "" then
 		print("/har cmd");
 		print("---->on    - 开启自动回答验证功能")
 		print("---->off   - 关闭自动回答验证功能")
 		print("---->trace - switch trace flag.")
-		print("---->dump  - dump all logs.")
+		print("---->log   - dislpay all logs.")
+		print("---->dump  - dump all frame.")
 		print("[HappyAutoSlove]Active=" .. tostring(HAS_ACTIVE_FLAG) .. ".");
 		print("[HappyAutoSlove]Trace =" .. tostring(TRACE_FLAG) .. ".");
 	else
@@ -69,8 +72,8 @@ function HAS_EventHandler(self, event, ...)
 		LOGGER.trace("receive SAY message. msg=" .. msg .. ".");
 		if HAS_checkTargetMessage(msg) then
 			LOGGER.debug("---->check this message from " .. sendPlayerName .. ".");
-			HAS_saveLog("CHAT_MSG_SAY", sendPlayerName, msg);
 			HAS_sloveQuestion(msg);
+			HAS_saveLog("CHAT_MSG_SAY", sendPlayerName, msg);
 		end
 	elseif event == "CHAT_MSG_SYSTEM" then
 		local msg = ...;
@@ -197,6 +200,15 @@ function HAS_dumpAllFrame()
 			LOGGER.debug(frameName .. ", visable:" .. frame:IsVisible());
 			LOGGER.debug("  close it!");
 			StaticPopup_OnClick(frame, 1)
+		end
+	end
+end
+
+function HAF_closeQuestionFrame()
+	for i = 1, STATICPOPUP_NUMDIALOGS do
+		local frame = _G["StaticPopup" .. i]
+		if (frame:IsVisible() and frame.which == "GOSSIP_") then
+			StaticPopup_OnClick(frame, 1);
 		end
 	end
 end
