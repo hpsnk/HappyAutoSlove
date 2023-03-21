@@ -80,9 +80,9 @@ function HAS_EventHandler(self, event, ...)
 		LOGGER.trace("receive SYSTEM message. msg=" .. msg .. ".");
 		if HAS_checkTargetMessage(msg) then
 			LOGGER.debug("---->check this message!");
+			HAF_closeQuestionFrame();
 			HAS_sloveQuestion(msg);
 			HAS_saveLog("CHAT_MSG_SYSTEM", "SYSTEM", msg);
-			HAF_closeQuestionFrame();
 		end
 	end
 end
