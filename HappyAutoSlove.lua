@@ -208,7 +208,7 @@ end
 function HAF_closeQuestionFrame()
 	for i = 1, STATICPOPUP_NUMDIALOGS do
 		local frame = _G["StaticPopup" .. i]
-		if (frame:IsVisible() and frame.which == "GOSSIP_") then
+		if (frame:IsVisible() and frame.which == "GOSSIP_CONFIRM") then
 			StaticPopup_OnClick(frame, 1);
 		end
 	end
