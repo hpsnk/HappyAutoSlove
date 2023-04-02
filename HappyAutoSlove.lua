@@ -46,6 +46,8 @@ SlashCmdList["HAS"]         = function(msg)
 			HappyAutoSloveDataPerCharDB.trace = true;
 		end
 		print("[HappyAutoSlove]Trace=" .. tostring(TRACE_FLAG) .. ".");
+	elseif cmd == "check" then
+		HAS_closeAllFrame();
 	elseif cmd == "log" then
 		HAS_dumpLog();
 	elseif cmd == "dump" then
@@ -57,6 +59,8 @@ SlashCmdList["HAS"]         = function(msg)
 		print("---->trace - switch trace flag.")
 		print("---->log   - dislpay all logs.")
 		print("---->dump  - dump all frame.")
+		print("---->check - check and close all frame.")
+		print("status:")
 		print("[HappyAutoSlove]Active=" .. tostring(HAS_ACTIVE_FLAG) .. ".");
 		print("[HappyAutoSlove]Trace =" .. tostring(TRACE_FLAG) .. ".");
 	else
@@ -71,7 +75,7 @@ function HAS_EventHandler(self, event, ...)
 		local msg, sendPlayerName = ...;
 		LOGGER.trace("receive SAY message. msg=" .. msg .. ".");
 		if HAS_checkTargetMessage(msg) then
-			LOGGER.debug("---->check this message from " .. sendPlayerName .. ".");
+			-- LOGGER.debug("---->check this message from " .. sendPlayerName .. ".");
 			HAS_sloveQuestion(msg);
 			HAS_saveLog("CHAT_MSG_SAY", sendPlayerName, msg);
 		end
@@ -79,7 +83,7 @@ function HAS_EventHandler(self, event, ...)
 		local msg = ...;
 		LOGGER.trace("receive SYSTEM message. msg=" .. msg .. ".");
 		if HAS_checkTargetMessage(msg) then
-			LOGGER.debug("---->check this message!");
+			-- LOGGER.debug("---->check this message!");
 			HAF_closeQuestionFrame();
 			HAS_sloveQuestion(msg);
 			HAS_saveLog("CHAT_MSG_SYSTEM", "SYSTEM", msg);
@@ -120,7 +124,7 @@ function HAS_sloveQuestion(msg)
 	-- start pos = find + 2 (skip fullspace character and :)
 	-- end   pos = find - 1 (skip =)
 	local subString = string.sub(msg, posA2, posB1 - 1)
-	LOGGER.debug(">" .. subString .. "<");
+	-- LOGGER.debug(">" .. subString .. "<");
 
 	local val1, operate, val2 = string.match(subString, "(%d+)([%+%-%*/])(%d+)")
 
@@ -142,8 +146,8 @@ function HAS_sloveQuestion(msg)
 		numberAnswer = numberVal1 / numberVal2
 	end
 
-	LOGGER.debug("=");
-	LOGGER.debug(numberAnswer);
+	-- LOGGER.debug("=");
+	-- LOGGER.debug(numberAnswer);
 
 	if HAS_ACTIVE_FLAG then
 		SendChatMessage(tostring(numberAnswer));
@@ -198,8 +202,30 @@ function HAS_dumpAllFrame()
 			-- LOGGER.debug( frameName .. ", visable:" .. valFrame:IsVisible() );
 			LOGGER.debug(frameName .. ", visable:false");
 		else
-			LOGGER.debug(frameName .. ", visable:" .. frame:IsVisible());
+			-- LOGGER.debug(frameName .. ", visable:" .. frame:IsVisible());
+			LOGGER.debug( frameName );
 			LOGGER.debug("  close it!");
+			StaticPopup_OnClick(frame, 1)
+		end
+	end
+end
+
+function HAS_closeAllFrame()
+	for i = 1, STATICPOPUP_NUMDIALOGS do
+		local frame = _G["StaticPopup" .. i]
+
+		-- LOGGER.debug(i);
+
+		local frameName = frame.which;
+
+		if frameName == nil then
+			frameName = "null";
+			-- LOGGER.debug( frameName .. ", visable:" .. valFrame:IsVisible() );
+			-- LOGGER.debug(frameName .. ", visable:false");
+		else
+			-- LOGGER.debug(frameName .. ", visable:" .. frame:IsVisible());
+			-- LOGGER.debug( frameName );
+			-- LOGGER.debug("  close it!");
 			StaticPopup_OnClick(frame, 1)
 		end
 	end
@@ -208,6 +234,13 @@ end
 function HAF_closeQuestionFrame()
 	for i = 1, STATICPOPUP_NUMDIALOGS do
 		local frame = _G["StaticPopup" .. i]
+		LOGGER.debug( i );
+		if ( frame:IsVisible() ) then
+			LOGGER.debug( frame.which );
+		else
+			LOGGER.debug( "nil" );
+		end
+
 		if (frame:IsVisible() and frame.which == "GOSSIP_CONFIRM") then
 			StaticPopup_OnClick(frame, 1);
 		end
